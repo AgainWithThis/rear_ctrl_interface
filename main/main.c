@@ -5,9 +5,24 @@
 #include "bsp/esp-bsp.h"
 #include "bsp/display.h"
 #include "i2c_bus.h"
+#include "driver/i2c_master.h"
 #include "esp_log.h"
 #include "esp_err.h"
 #include "esp_log.h"
+#include "esp_console.h"
+
+
+void i2c_setup(void)
+{
+  i2c_master_bus_config_t i2c_bus_config = {
+    .clk_source = I2C_CLK_SRC_DEFAULT,
+    .i2c_port = I2C_NUM_0,
+    .sda_io_num = 7,
+    .scl_io_num = 8,
+    .glitch_ignore_cnt = 7,
+    .flags.enable_internal_pullup = true,
+  };
+}
 
 void app_main(void)
 {
@@ -32,7 +47,6 @@ void app_main(void)
     lv_obj_center(screen);
     lv_obj_set_style_bg_color(screen, lv_color_hex(0xFF), LV_STATE_DEFAULT);
     lv_obj_clear_flag(screen, LV_OBJ_FLAG_SCROLLABLE);
-
 
     bsp_display_unlock();
 }
